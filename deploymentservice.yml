@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: maven
+    labels:
+       env: prod
+       app: maven
+spec:
+   replicas: 2
+   selector:
+       matchLabels:
+           env: prod
+           app: maven
+   template:
+       metadata:
+           labels:
+              env: prod
+              app: maven
+       spec:
+          containers:
+              - name: maven
+                image: purushothamareddy/project:1.0
+                ports:
+                  - containerPort: 8082
+                  
+                  
+ 
+---
+apiVersion: v1
+kind: Service
+metadata:
+     name: maven
+     labels:
+         env: prod
+         app: maven
+spec:
+  selector:
+      app: maven
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8082
+  type: LoadBalancer 
